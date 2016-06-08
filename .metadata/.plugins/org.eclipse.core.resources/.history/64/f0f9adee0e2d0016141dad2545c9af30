@@ -1,9 +1,0 @@
-package jp.co.iccom.suganuma_haruka.calculate_sales;
-
-import java.util.HashMap;
-
-public class BlanchList {
-	public static void main(String[] args) {
-		System.out.println(args[0]);
-	}
-}
