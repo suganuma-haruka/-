@@ -8,51 +8,81 @@ import java.util.HashMap;
 
 public class UriageSystem {
 	public static void main(String[] args) {
+		HashMap<String, String> map = new HashMap<String, String>();
 		try {
 			File blanch = new File("C:\\java\\blanch.lst");
 			FileReader fr = new FileReader(blanch);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
 			while((s = br.readLine()) != null) {
-//				System.out.println(s);
 
 				String[] items = s.split(",");
 				for(int i = 0; i < items.length; i++) {
 					System.out.println(items[i]);
 				}
-
-//				String str5 = s;
-//				String[] items2 = str.split(",");
-//				for(int i = 0; i < items.length; i++) {
-//					System.out.println(items2[i]);
-
-//				}
+				
+					map.put(items[0], items[1]);
+						
+						String str = items[0];
+							if(str.matches("^\\d{3}$")) {
+//								System.out.println(items[0]);
+							} else {
+								System.out.println("支店定義ファイルのフォーマットが不正です。1");
+								break;
+							}
+							
+			
+						String str1 = items[1];
+							if(str1.matches("\r\n")) {
+//								System.out.println(items[1]);
+							} else {
+								System.out.println("支店定義ファイルのフォーマットが不正です。2");
+							}
 			}
+			
 			br.close();
-		} catch(IOException e) {
-				System.out.println(e + "支店定義ファイルが存在しません。");
+			
+		} catch(IOException a) {
+			System.out.println("支店定義ファイルが存在しません。");
+			System.out.println(a);
+			
+//		} catch(ArrayIndexOutOfBoundsException b) {
+//			System.out.println("支店定義ファイルのフォーマットが不正です。");
+//			System.out.println(b);
 		}
 
-
-		HashMap<String, String> map = new HashMap<String, String>();
-			map.put("001", "札幌支店");
-			map.put("002", "仙台支店");
-			map.put("003", "東京支店");
-			map.put("004", "名古屋支店");
-			map.put("005","大阪支店");
+		System.out.println(map.entrySet());
 
 //		try {
 //			File commodity = new File("C:\\java\\commodity.lst");
 //			FileReader fR = new FileReader(commodity);
 //			BufferedReader bR = new BufferedReader(fR);
-//			String p;
-//			while((p = bR.readLine()) != null) {
-//				System.out.println(p);
+//			String t;
+//			while((t = bR.readLine()) != null) {
+//
+//				String[] items = t.split(",");
+//				for(int i = 0; i < items.length; i++) {
+//					System.out.println(items[i]);
+//				}
+
 //			}
 //			bR.close();
-//			} catch(IOException d) {
-//				System.out.println(d + "商品定義ファイルが存在しません。");
-//			}
+//		} catch(IOException c) {
+//			System.out.println("商品定義ファイルが存在しません。");
+//			System.out.println(c);
+//		}
+
+//		try {
+//			HashMap<String, String> map = new HashMap<String, String>();
+//				map.put("SFT00001", "Wandows");
+//				map.put("SFT00002", "Offace");
+//				map.put("SFT00003", "Lanux");
+//				map.put("SFT00004", "Solaras");
+
+//		} catch(ArrayIndexOutOfBoundsException d) {
+//			System.out.println("商品定義ファイルのフォーマットが不正です。");
+//			System.out.println(d);
+//		}
 	}
 }
 
