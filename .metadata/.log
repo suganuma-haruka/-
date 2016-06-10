@@ -212,3 +212,127 @@ Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.
 
 !ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-09 16:53:09.903
 !MESSAGE properties removing for project '商品定義ファイル'
+!SESSION 2016-06-10 08:48:33.026 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.7.0_51
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.jee.product
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-10 08:49:10.869
+!MESSAGE properties loading for project 'RemoteSystemsTempFiles'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-10 08:49:11.103
+!MESSAGE properties loading for project '売上集計システム'
+
+!ENTRY org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE キーバインドの競合が発生しました。 通常のアクセラレーター操作を妨げる可能性があります。
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE ALT+ARROW_DOWN の競合が発生しました:
+Binding(ALT+ARROW_DOWN,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.text.moveLineDown,1 行下へ移動,
+		選択した行を下に移動します,
+		Category(org.eclipse.ui.category.textEditor,テキスト編集,テキスト編集コマンド,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1b48150,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(ALT+ARROW_DOWN,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.goToNextUnread,次の未読タスクへジャンプ,
+		,
+		Category(org.eclipse.ui.category.navigate,ナビゲート,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@17245f9,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE ALT+SHIFT+ARROW_UP の競合が発生しました:
+Binding(ALT+SHIFT+ARROW_UP,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.select.enclosing,エンクロージング要素の選択,
+		エンクロージング要素を含むように選択を拡張,
+		Category(org.eclipse.ui.category.edit,編集,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@195cde9,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.jdt.ui.javaEditorScope,,,system)
+Binding(ALT+SHIFT+ARROW_UP,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.markTaskReadGoToPreviousUnread,タスクを既読としてマークし、前の未読タスクへジャンプ,
+		,
+		Category(org.eclipse.mylyn.tasks.ui.commands,タスク・リポジトリー,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1bd6f,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE INSERT の競合が発生しました:
+Binding(INSERT,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.text.toggleOverwrite,上書きの切り替え,
+		上書きモードの切り替え,
+		Category(org.eclipse.ui.category.textEditor,テキスト編集,テキスト編集コマンド,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3be54a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(INSERT,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.new.local.task,新規ローカル・タスク,
+		,
+		Category(org.eclipse.mylyn.tasks.ui.commands,タスク・リポジトリー,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4a8566,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE ALT+SHIFT+U の競合が発生しました:
+Binding(ALT+SHIFT+U,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.remove.occurrence.annotations,出現箇所の注釈の除去,
+		出現箇所の注釈を現在のエディターから除去します,
+		Category(org.eclipse.jdt.ui.category.source,ソース,Java ソース・アクション,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7c0b7d,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.jdt.ui.javaEditorScope,,,system)
+Binding(ALT+SHIFT+U,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.markTaskUnread,タスクを未読としてマーク,
+		,
+		Category(org.eclipse.mylyn.tasks.ui.commands,タスク・リポジトリー,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1d642f8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE ALT+ARROW_UP の競合が発生しました:
+Binding(ALT+ARROW_UP,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.text.moveLineUp,1 行上へ移動,
+		選択した行を上に移動します,
+		Category(org.eclipse.ui.category.textEditor,テキスト編集,テキスト編集コマンド,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1c6e22b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(ALT+ARROW_UP,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.goToPreviousUnread,前の未読タスクへジャンプ,
+		,
+		Category(org.eclipse.ui.category.navigate,ナビゲート,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@17eb8ff,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-10 18:08:50.699
+!MESSAGE ALT+SHIFT+ARROW_DOWN の競合が発生しました:
+Binding(ALT+SHIFT+ARROW_DOWN,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.select.last,前回の選択を復元,
+		前回の選択を復元,
+		Category(org.eclipse.ui.category.edit,編集,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2a8a7a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.jdt.ui.javaEditorScope,,,system)
+Binding(ALT+SHIFT+ARROW_DOWN,
+	ParameterizedCommand(Command(org.eclipse.mylyn.tasks.ui.command.markTaskReadGoToNextUnread,タスクを既読としてマークし、次の未読タスクへジャンプ,
+		,
+		Category(org.eclipse.mylyn.tasks.ui.commands,タスク・リポジトリー,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@e9707f,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.mylyn.tasks.ui.views.tasks,,,system)
