@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class UriageSystem {
 	public static void main(String[] args) {
-		System.out.println(args[0]);
+//		System.out.println(args[0]);
 		HashMap<String, String> map = new HashMap<String, String>();
 		try {
 			File branch = new File(args[0], "branch.lst");
@@ -26,7 +26,6 @@ public class UriageSystem {
 				if(!str.matches("^\\d{3}$")) {
 					System.out.println("支店定義ファイルのフォーマットが不正です");
 					break;
-
 				}
 
 				map.put(items[0], items[1]);
@@ -40,12 +39,6 @@ public class UriageSystem {
 		}
 
 		System.out.println(map.entrySet());
-
-
-
-
-
-
 
 
 
@@ -80,6 +73,43 @@ public class UriageSystem {
 		}
 
 		System.out.println(map1.entrySet());
+
+
+
+		File file = new File(args[0]);
+		File files[] = file.listFiles();
+
+		for(int i = 0; i < files.length; i++) {
+			String str = files[i].getName();
+			if(str.matches("^\\d{8}.rcd$")) {
+//				System.out.println(files[i].getName());
+
+				String[] items = (files[i].getName()).split("\\.");
+				for(int j = 0; j < items.length; j++) {
+					System.out.println(items[j]);
+
+
+//				int k = Integer.parseInt(items[j]);
+				for(int k = Integer.parseInt(items[j]); items[j].length - 1; k++);
+
+
+
+
+				}
+
+
+
+
+
+			}
+		}
+
+
+
+
+
+
+
 
 
 
