@@ -541,3 +541,34 @@ Caused by: org.eclipse.swt.SWTException: Widget is disposed
 	at org.eclipse.jface.action.Action.runWithEvent(Action.java:499)
 	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:119)
 	... 55 more
+!SESSION 2016-06-14 08:55:42.135 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.7.0_51
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.jee.product
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-14 08:56:12.072
+!MESSAGE properties loading for project 'RemoteSystemsTempFiles'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-14 08:56:12.259
+!MESSAGE properties loading for project '売上集計システム'
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.031
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.103
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.108
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.111
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.113
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.disable.grammar.constraints
+
+!ENTRY org.eclipse.ui 4 4 2016-06-14 18:37:30.116
+!MESSAGE Could not retrieve EHandlerService or ICommandService from context evaluation context fororg.eclipse.wst.xml.ui.reload.dependencies
