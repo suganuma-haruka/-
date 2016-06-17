@@ -9,7 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UriageSystem {
 	public static void main(String[] args) {
@@ -24,7 +28,6 @@ public class UriageSystem {
 
 		//商品0円のHashMap
 		HashMap<String,Integer> commodityFin = new HashMap<String,Integer>();
-
 
 
 
@@ -58,12 +61,11 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println("支店定義ファイルが存在しません");
-			System.out.println(e);
+			System.out.println(e + "支店定義ファイルが存在しません");
 		}//try～catch
 
 		//mapに格納されているキーと値を出力
-		System.out.println(branchCode.entrySet());
+//		System.out.println(branchCode.entrySet());
 
 
 
@@ -94,12 +96,11 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println("商品定義ファイルが存在しません");
-			System.out.println(e);
+			System.out.println(e + "商品定義ファイルが存在しません");
 		}//try～catch
 
 		//map1に格納されているキーと値を出力
-		System.out.println(commodityCode.entrySet());
+//		System.out.println(commodityCode.entrySet());
 
 
 
@@ -136,8 +137,6 @@ public class UriageSystem {
 
 
 
-
-
 		//売上ファイルの読み込み
 		try {
 			for(int i = 0; i < fileName.size(); i++) {
@@ -156,23 +155,18 @@ public class UriageSystem {
 					salesFile.add(s);
 //					System.out.println(uriageList);
 				}//while
-
 				br.close();
-
 
 				//"salesFile"内の行数確認
 				if(salesFile.size() > 3 || salesFile.size() > 3) {
 					System.out.println("売上ファイル内のフォーマットが不正です");
 					return;
-				}
-
-
+				}//if
 				//"branchFin"にmapされている値かどうかの判断
 				if(!branchFin.containsKey(salesFile.get(0))) {
 					System.out.println("売上ファイル内の支店コードが不正です");
 					return;
-				}
-
+				}//if
 				//"salesFile"1行目の支店コードをキーにして金額を集計
 				int branchSum = branchFin.get(salesFile.get(0));
 				int branchSal = Integer.parseInt(salesFile.get(2));
@@ -186,10 +180,7 @@ public class UriageSystem {
 				if(braStr.matches("^\\d{10,}")) {
 					System.out.println("合計金額が10桁を超えています");
 					return;
-				}
-
-
-
+				}//if
 				//"commodityFin"にmapされている値かどうかの判断
 				if(!commodityFin.containsKey(salesFile.get(1))) {
 					System.out.println("売上ファイル内の商品コードが不正です");
@@ -209,25 +200,20 @@ public class UriageSystem {
 					System.out.println("合計金額が10桁を超えています");
 					return;
 				}//if
-
-
 			}//for
-
 		} catch(IOException e) {
-			System.out.println(e);
+			System.out.println(e + "予期せぬエラーが発生しました");
 		}//try～catch
 
 		//uriageMapに格納してあるキーと値を出力
-		System.out.println(branchFin.entrySet());
+//		System.out.println(branchFin.entrySet());
 		//syouhinMapに格納してあるキーと値を出力
-		System.out.println(commodityFin.entrySet());
+//		System.out.println(commodityFin.entrySet());
 
 //		for(int i = 0; i < salesFile.size(); i++) {
 //			System.out.println(salesFile.get(i));
 //		}//for
 
-
-		
 
 
 		//支店別集計ファイル
@@ -237,15 +223,36 @@ public class UriageSystem {
 			FileWriter fw = new FileWriter(branchFile);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter pw = new PrintWriter(bw);
-			//"branchCode"からキーを取得し、値を取り出す
-			for(String branchKey : branchCode.keySet()) {
-					pw.println(branchKey + "," + branchCode.get(branchKey) + "," + branchFin.get(branchKey));
-			}
+
+			//Map.Entryのリストを作る
+			List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(branchFin.entrySet());
+			//ComparatorでMap.Entryの値を比較
+			Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+				//比較関数
+				@Override
+				public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2) {
+					return o2.getValue(). compareTo(o1.getValue()); //降順
+				}
+			});
+			//ソートした値を組み合わせて出力
+			for(Map.Entry<String,Integer> e : entries) {
+//				System.out.println(e.getKey() + " = " + e.getValue());
+				String branchKey = e.getKey();
+				String branchName = branchCode.get(e.getKey());
+				int branchSum = e.getValue();
+				pw.println(branchKey + "," + branchName + "," + branchSum);
+				System.out.println(branchKey + "," + branchName + "," + branchSum);
+			}//for
+
+			//"branchFin"からキーを取得し、値を取り出す
+//			for(String branchKey : branchFin.keySet()) {
+//				System.out.println(branchKey + "," + branchCode.get(branchKey) + "," + branchFin.get(branchKey));
+//			}
 			bw.close();
-			
 		} catch(IOException e) {
-			System.out.println(e);
-		}
+			System.out.println(e + "予期せぬエラーが発生しました");
+		}//try～catch
+
 
 
 		//商品別集計ファイル
@@ -255,18 +262,36 @@ public class UriageSystem {
 			FileWriter fw = new FileWriter(commodityFile);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter pw = new PrintWriter(bw);
-			//"commodityCode"からキーを取得し、値を取り出す
-			for(String commodityKey : commodityCode.keySet()) {
-					pw.println(commodityKey + "," + commodityCode.get(commodityKey) + "," + commodityFin.get(commodityKey));
-			}
+
+			//降順にソート
+			//Map.Entryのリストを作る
+			List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(commodityFin.entrySet());
+			//ComparatorでMap.Entryの値を比較
+			Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+				//比較関数
+				@Override
+				public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2) {
+					return o2.getValue(). compareTo(o1.getValue()); //降順
+				}
+			});
+			//ソートした値を組み合わせて出力
+			for(Map.Entry<String,Integer> e : entries) {
+//				System.out.println(e.getKey() + " = " + e.getValue());
+				String commodityKey = e.getKey();
+				String commodityName = commodityCode.get(e.getKey());
+				int commoditySum = e.getValue();
+				pw.println(commodityKey + "," + commodityName + "," + commoditySum);
+				System.out.println(commodityKey + "," + commodityName + "," + commoditySum);
+			}//for
+			//"commodityFin"からキーを取得し、値を取り出す
+//				for(String commodityKey : commodityFin.keySet()) {
+//					pw.println(commodityKey + "," + commodityCode.get(commodityKey) + "," + commodityFin.get(commodityKey));
+//			}
 			bw.close();
-			
 		} catch(IOException e) {
-			System.out.println(e);
-		}
+			System.out.println(e + "予期せぬエラーが発生しました");
+		}//try～catch
 
-
-
-	}
-}
+	}//main
+}//class
 
