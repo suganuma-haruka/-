@@ -29,8 +29,6 @@ public class UriageSystem {
 		//商品0円のHashMap
 		HashMap<String,Integer> commodityFin = new HashMap<String,Integer>();
 
-
-
 		try {
 			//支店定義ファイルの読み込み
 			File branch = new File(args[0], "branch.lst");
@@ -48,8 +46,8 @@ public class UriageSystem {
 				//支店コードが3桁でない場合のエラー処理
 				String str = items[0];
 				if(!str.matches("^\\d{3}$")) {
-					System.out.println("支店定義ファイルのフォーマットが不正です");
-					break;
+					System.out.println("支店定義ファイルのフォーマットが不正です1");
+					return;
 				}//if
 				//shitenCodepにキーと値を追加
 				branchCode.put(items[0], items[1]);
@@ -60,12 +58,10 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println(e + "支店定義ファイルが存在しません");
+			System.out.println(e + "支店定義ファイルが存在しません2");
+		} catch(ArrayIndexOutOfBoundsException e) {
+			System.out.println(e + "予期せぬエラーが発生しました3");
 		}//try～catch
-
-
-
-
 
 		try {
 			//商品定義ファイルの読み込み
@@ -81,8 +77,8 @@ public class UriageSystem {
 				//商品コードが半角英数字8桁でない場合のエラー処理
 				String str = items[0];
 				if(!str.matches("^\\w{8}$")) {
-					System.out.println("商品定義ファイルのフォーマットが不正です");
-					break;
+					System.out.println("商品定義ファイルのフォーマットが不正です4");
+					return;
 				}//if
 				//syouhinCodeにキーと値を追加
 				commodityCode.put(items[0], items[1]);
@@ -93,12 +89,10 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println(e + "商品定義ファイルが存在しません");
+			System.out.println(e + "商品定義ファイルが存在しません5");
+		} catch(ArrayIndexOutOfBoundsException e) {
+			System.out.println(e + "予期せぬエラーが発生しました6");
 		}//try～catch
-
-
-
-
 
 		//コマンドライン引数からディレクトリを指定
 		File file = new File(args[0]);
@@ -113,9 +107,7 @@ public class UriageSystem {
 			if(str.matches("^\\d{8}.rcd$")) {
 				//該当ファイル名を"."で分割
 				String[] items = (files[i].getName()).split("\\.");
-
 				fileName.add(items[0]);
-
 			}//if
 		}//for
 		//要素数を元にファイル名が連番になっているかの確認
@@ -125,12 +117,9 @@ public class UriageSystem {
 		int x = Integer.parseInt(max);
 		int y = Integer.parseInt(min);
 
-		if(x - y == fileName.size() - 1) {
-		} else {
-			System.out.println("売上ファイル名が連番になっていません");
-		}//if～else
-
-
+		if(!(x - y == fileName.size() - 1)) {
+			System.out.println("売上ファイル名が連番になっていません7");
+		}//if
 
 		//売上ファイルの読み込み
 		try {
@@ -151,15 +140,18 @@ public class UriageSystem {
 				br.close();
 
 				//"salesFile"内の行数確認
-				if(salesFile.size() > 3 || salesFile.size() > 3) {
-					System.out.println("売上ファイル内のフォーマットが不正です");
-					return;
+				if(salesFile.size() > 3 || salesFile.size() < 3) {
+					String error = fileName.get(i) + ".rcdのフォーマットが不正です8";
+						System.out.println(error);
+						return;
 				}//if
 				//"branchFin"にmapされている値かどうかの判断
-				if(!branchFin.containsKey(salesFile.get(0))) {
-					System.out.println("売上ファイル内の支店コードが不正です");
-					return;
-				}//if
+//				if(!branchFin.containsKey(salesFile.get(0))) {
+//					System.out.println("支店定義ファイルのフォーマットが不正です9");
+//				} else if(!salesFile.get(0).matches("^\\d{3}$")) {
+//					System.out.println("支店定義ファイルのフォーマットが不正です10");
+//					return;
+//				}//if
 				//"salesFile"1行目の支店コードをキーにして金額を集計
 				int branchSum = branchFin.get(salesFile.get(0));
 				int branchSal = Integer.parseInt(salesFile.get(2));
@@ -171,14 +163,14 @@ public class UriageSystem {
 				//合計金額が10桁を超えたときのエラー
 				String braStr = Integer.toString(braTotalSum);
 				if(braStr.matches("^\\d{10,}")) {
-					System.out.println("合計金額が10桁を超えています");
+					System.out.println("合計金額が10桁を超えました11");
 					return;
 				}//if
-				//"commodityFin"にmapされている値かどうかの判断
-				if(!commodityFin.containsKey(salesFile.get(1))) {
-					System.out.println("売上ファイル内の商品コードが不正です");
-					return;
-				}
+//				//"commodityFin"にmapされている値かどうかの判断
+//				if(!commodityFin.containsKey(salesFile.get(1))) {
+//					System.out.println("商品定義ファイルのフォーマットが不正です12");
+//					return;
+//				}//if
 				//"salesFin"2行目の商品コードをキーにして金額を集計
 				int commoditySum = commodityFin.get(salesFile.get(1));
 				int commoditySal = Integer.parseInt(salesFile.get(2));
@@ -190,15 +182,13 @@ public class UriageSystem {
 				//合計金額が10桁を超えたときのエラー
 				String comStr = Integer.toString(comTotalSum);
 				if(comStr.matches("^\\d{10,}")) {
-					System.out.println("合計金額が10桁を超えています");
+					System.out.println("合計金額が10桁を超えました13");
 					return;
 				}//if
 			}//for
 		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました");
+			System.out.println(e + "予期せぬエラーが発生しました14");
 		}//try～catch
-
-
 
 		//支店別集計ファイル
 		try {
@@ -224,17 +214,11 @@ public class UriageSystem {
 				String branchName = branchCode.get(e.getKey());
 				int branchSum = e.getValue();
 				pw.println(branchKey + "," + branchName + "," + branchSum);
-				System.out.println(branchKey + "," + branchName + "," + branchSum);
 			}//for
-
-
-
 			bw.close();
 		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました");
+			System.out.println(e + "予期せぬエラーが発生しました15");
 		}//try～catch
-
-
 
 		//商品別集計ファイル
 		try {
@@ -261,11 +245,10 @@ public class UriageSystem {
 				String commodityName = commodityCode.get(e.getKey());
 				int commoditySum = e.getValue();
 				pw.println(commodityKey + "," + commodityName + "," + commoditySum);
-				System.out.println(commodityKey + "," + commodityName + "," + commoditySum);
 			}//for
 			bw.close();
 		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました");
+			System.out.println(e + "予期せぬエラーが発生しました16");
 		}//try～catch
 
 	}//main
