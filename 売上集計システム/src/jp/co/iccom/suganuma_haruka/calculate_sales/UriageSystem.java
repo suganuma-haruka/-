@@ -44,7 +44,6 @@ public class UriageSystem {
 				//変数"i"を"0"で初期化し、"i"の値が"items"の要素数より小さい場合に{}を実行し、
 				//大きくなったらfor文の実行を終了、"i"の値を"1"増やす
 				for(int i = 0; i < items.length; i++) {
-//					System.out.println(items[i]);
 				}//for
 				//支店コードが3桁でない場合のエラー処理
 				String str = items[0];
@@ -64,8 +63,7 @@ public class UriageSystem {
 			System.out.println(e + "支店定義ファイルが存在しません");
 		}//try～catch
 
-		//mapに格納されているキーと値を出力
-//		System.out.println(branchCode.entrySet());
+
 
 
 
@@ -79,7 +77,6 @@ public class UriageSystem {
 				//ファイルのデータを","で分割
 				String[] items = s.split(",");
 				for(int i = 0; i < items.length; i++) {
-//						System.out.println(items[i]);
 				}//for
 				//商品コードが半角英数字8桁でない場合のエラー処理
 				String str = items[0];
@@ -99,8 +96,7 @@ public class UriageSystem {
 			System.out.println(e + "商品定義ファイルが存在しません");
 		}//try～catch
 
-		//map1に格納されているキーと値を出力
-//		System.out.println(commodityCode.entrySet());
+
 
 
 
@@ -130,7 +126,6 @@ public class UriageSystem {
 		int y = Integer.parseInt(min);
 
 		if(x - y == fileName.size() - 1) {
-//			System.out.println(fileName);
 		} else {
 			System.out.println("売上ファイル名が連番になっていません");
 		}//if～else
@@ -150,10 +145,8 @@ public class UriageSystem {
 				ArrayList<String> salesFile = new ArrayList<String>();
 
 				while((s = br.readLine()) != null) {
-//					System.out.println(s);
 					//addを使ってArrayListに要素として格納
 					salesFile.add(s);
-//					System.out.println(uriageList);
 				}//while
 				br.close();
 
@@ -205,15 +198,6 @@ public class UriageSystem {
 			System.out.println(e + "予期せぬエラーが発生しました");
 		}//try～catch
 
-		//uriageMapに格納してあるキーと値を出力
-//		System.out.println(branchFin.entrySet());
-		//syouhinMapに格納してあるキーと値を出力
-//		System.out.println(commodityFin.entrySet());
-
-//		for(int i = 0; i < salesFile.size(); i++) {
-//			System.out.println(salesFile.get(i));
-//		}//for
-
 
 
 		//支店別集計ファイル
@@ -236,7 +220,6 @@ public class UriageSystem {
 			});
 			//ソートした値を組み合わせて出力
 			for(Map.Entry<String,Integer> e : entries) {
-//				System.out.println(e.getKey() + " = " + e.getValue());
 				String branchKey = e.getKey();
 				String branchName = branchCode.get(e.getKey());
 				int branchSum = e.getValue();
@@ -244,10 +227,8 @@ public class UriageSystem {
 				System.out.println(branchKey + "," + branchName + "," + branchSum);
 			}//for
 
-			//"branchFin"からキーを取得し、値を取り出す
-//			for(String branchKey : branchFin.keySet()) {
-//				System.out.println(branchKey + "," + branchCode.get(branchKey) + "," + branchFin.get(branchKey));
-//			}
+
+
 			bw.close();
 		} catch(IOException e) {
 			System.out.println(e + "予期せぬエラーが発生しました");
@@ -276,17 +257,12 @@ public class UriageSystem {
 			});
 			//ソートした値を組み合わせて出力
 			for(Map.Entry<String,Integer> e : entries) {
-//				System.out.println(e.getKey() + " = " + e.getValue());
 				String commodityKey = e.getKey();
 				String commodityName = commodityCode.get(e.getKey());
 				int commoditySum = e.getValue();
 				pw.println(commodityKey + "," + commodityName + "," + commoditySum);
 				System.out.println(commodityKey + "," + commodityName + "," + commoditySum);
 			}//for
-			//"commodityFin"からキーを取得し、値を取り出す
-//				for(String commodityKey : commodityFin.keySet()) {
-//					pw.println(commodityKey + "," + commodityCode.get(commodityKey) + "," + commodityFin.get(commodityKey));
-//			}
 			bw.close();
 		} catch(IOException e) {
 			System.out.println(e + "予期せぬエラーが発生しました");
