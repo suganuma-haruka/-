@@ -52,10 +52,10 @@ public class UriageSystem {
 				//支店コードが3桁でない場合のエラー処理
 				String str = items[0];
 				if(!str.matches("^\\d{3}$")) {
-					System.out.println("支店定義ファイルのフォーマットが不正です1");
+					System.out.println("支店定義ファイルのフォーマットが不正です");
 					return;
 				} else if(items.length > 2 || items.length < 2) {
-					System.out.println("支店定義ファイルのフォーマットが不正です1.2");
+					System.out.println("支店定義ファイルのフォーマットが不正です");
 					return;
 				}//if
 				//shitenCodepにキーと値を追加
@@ -67,10 +67,10 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println("支店定義ファイルが存在しません2");
+			System.out.println("支店定義ファイルが存在しません");
 			return;
 		} catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println("予期せぬエラーが発生しました3");
+			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}//try～catch
 
@@ -88,10 +88,10 @@ public class UriageSystem {
 				//商品コードが半角英数字8桁でない場合のエラー処理
 				String str = items[0];
 				if(!str.matches("^\\w{8}$")) {
-					System.out.println("商品定義ファイルのフォーマットが不正です4");
+					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return;
 				} else if(items.length > 2 || items.length < 2) {
-					System.out.println("商品定義ファイルのフォーマットが不正です4.2");
+					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return;
 				}//if
 				//syouhinCodeにキーと値を追加
@@ -103,10 +103,10 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println("商品定義ファイルが存在しません5");
+			System.out.println("商品定義ファイルが存在しません");
 			return;
 		} catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println("予期せぬエラーが発生しました6");
+			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}//try～catch
 
@@ -125,7 +125,7 @@ public class UriageSystem {
 				String[] items = (files[i].getName()).split("\\.");
 				fileName.add(items[0]);
 			} else if(str.contains("rcd") && str.length() != 12) {
-				System.out.println("売上ファイル名が連番になっていません7.2");
+				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
 		}//for
@@ -137,10 +137,10 @@ public class UriageSystem {
 			int x = Integer.parseInt(max);
 			int y = Integer.parseInt(min);
 			if(!(x - y == fileName.size() - 1)) { //ファイル名が連番ではない場合のエラー
-				System.out.println("売上ファイル名が連番になっていません7");
+				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			} else if(files[i].isDirectory()) { //フォルダが含まれている場合のエラー
-				System.out.println("売上ファイル名が連番になっていません7.1");
+				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}//if
 		}//for
@@ -165,12 +165,12 @@ public class UriageSystem {
 
 				//"salesFile"内の行数確認
 				if(salesFile.size() > 3 || salesFile.size() < 3) {
-					System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です8");
+					System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です");
 					return;
 				}//if
 				//"branchFin"にmapされている値かどうかの判断
 				if(!branchFin.containsKey(salesFile.get(0))) {
-					System.out.println(fileName.get(i) + ".rcdの支店コードが不正です9");
+					System.out.println(fileName.get(i) + ".rcdの支店コードが不正です");
 					return;
 				}//if
 				//"salesFile"1行目の支店コードをキーにして金額を集計
@@ -184,12 +184,12 @@ public class UriageSystem {
 				//合計金額が10桁を超えたときのエラー
 				String braStr = Integer.toString(braTotalSum);
 				if(braStr.matches("^\\d{10,}")) {
-					System.out.println("合計金額が10桁を超えました11");
+					System.out.println("合計金額が10桁を超えました");
 					return;
 				}//if
 				//"commodityFin"にmapされている値かどうかの判断
 				if(!commodityFin.containsKey(salesFile.get(1))) {
-					System.out.println(fileName.get(i) + ".rcdの商品コードが不正です12");
+					System.out.println(fileName.get(i) + ".rcdの商品コードが不正です");
 					return;
 				}//if
 				//"salesFin"2行目の商品コードをキーにして金額を集計
@@ -203,12 +203,12 @@ public class UriageSystem {
 				//合計金額が10桁を超えたときのエラー
 				String comStr = Integer.toString(comTotalSum);
 				if(comStr.matches("^\\d{10,}")) {
-					System.out.println("合計金額が10桁を超えました13");
+					System.out.println("合計金額が10桁を超えました");
 					return;
 				}//if
 			}//for
 		} catch(IOException e) {
-			System.out.println("予期せぬエラーが発生しました14");
+			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}//try～catch
 
@@ -245,7 +245,7 @@ public class UriageSystem {
 				System.out.println("予期せぬエラーが発生しました");
 			}
 		} catch(IOException e) {
-			System.out.println("予期せぬエラーが発生しました15");
+			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}//try～catch
 
@@ -283,7 +283,7 @@ public class UriageSystem {
 				System.out.println("予期せぬエラーが発生しました");
 			}
 		} catch(IOException e) {
-			System.out.println("予期せぬエラーが発生しました16");
+			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}//try～catch
 	}//main
