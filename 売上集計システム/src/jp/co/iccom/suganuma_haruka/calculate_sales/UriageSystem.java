@@ -17,6 +17,12 @@ import java.util.Map;
 
 public class UriageSystem {
 	public static void main(String[] args) {
+		//コマンドライン引数の中身の確認
+		if(args.length != 1) {
+			System.out.println("予期せぬエラーが発生しました");
+			return;
+		}
+
 		//mapに支店定義ファイルの中身を格納
 		HashMap<String, String> branchCode = new HashMap<String, String>();
 
@@ -31,7 +37,7 @@ public class UriageSystem {
 
 		try {
 			//支店定義ファイルの読み込み
-			File branch = new File(args[0], "branch.lst");
+			File branch = new File(args[0] + File.separator + "branch.lst");
 			FileReader fr = new FileReader(branch);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
@@ -48,6 +54,9 @@ public class UriageSystem {
 				if(!str.matches("^\\d{3}$")) {
 					System.out.println("支店定義ファイルのフォーマットが不正です1");
 					return;
+				} else if(items.length > 2 || items.length < 2) {
+					System.out.println("支店定義ファイルのフォーマットが不正です1.2");
+					return;
 				}//if
 				//shitenCodepにキーと値を追加
 				branchCode.put(items[0], items[1]);
@@ -58,14 +67,16 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println(e + "支店定義ファイルが存在しません2");
+			System.out.println("支店定義ファイルが存在しません2");
+			return;
 		} catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println(e + "予期せぬエラーが発生しました3");
+			System.out.println("予期せぬエラーが発生しました3");
+			return;
 		}//try～catch
 
 		try {
 			//商品定義ファイルの読み込み
-			File commodity = new File(args[0], "commodity.lst");
+			File commodity = new File(args[0] + File.separator + "commodity.lst");
 			FileReader fr = new FileReader(commodity);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
@@ -79,6 +90,9 @@ public class UriageSystem {
 				if(!str.matches("^\\w{8}$")) {
 					System.out.println("商品定義ファイルのフォーマットが不正です4");
 					return;
+				} else if(items.length > 2 || items.length < 2) {
+					System.out.println("商品定義ファイルのフォーマットが不正です4.2");
+					return;
 				}//if
 				//syouhinCodeにキーと値を追加
 				commodityCode.put(items[0], items[1]);
@@ -89,9 +103,11 @@ public class UriageSystem {
 			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
-			System.out.println(e + "商品定義ファイルが存在しません5");
+			System.out.println("商品定義ファイルが存在しません5");
+			return;
 		} catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println(e + "予期せぬエラーが発生しました6");
+			System.out.println("予期せぬエラーが発生しました6");
+			return;
 		}//try～catch
 
 		//コマンドライン引数からディレクトリを指定
@@ -104,22 +120,30 @@ public class UriageSystem {
 		//指定したディレクトリから"半角数字8桁.rcd"に該当するファイルの検索
 		for(int i = 0; i < files.length; i++) {
 			String str = files[i].getName();
-			if(str.matches("^\\d{8}.rcd$")) {
+			if(str.matches("^\\d{8}.rcd$") && str.length() == 12) {
 				//該当ファイル名を"."で分割
 				String[] items = (files[i].getName()).split("\\.");
 				fileName.add(items[0]);
+			} else if(str.contains("rcd") && str.length() != 12) {
+				System.out.println("売上ファイル名が連番になっていません7.2");
+				return;
+			}
+		}//for
+
+		//要素数を元にファイル名が連番になっているかの確認
+		for (int i = 0 ; i < files.length ; i++){
+			String max = fileName.get(fileName.size() - 1);
+			String min = fileName.get(0);
+			int x = Integer.parseInt(max);
+			int y = Integer.parseInt(min);
+			if(!(x - y == fileName.size() - 1)) { //ファイル名が連番ではない場合のエラー
+				System.out.println("売上ファイル名が連番になっていません7");
+				return;
+			} else if(files[i].isDirectory()) { //フォルダが含まれている場合のエラー
+				System.out.println("売上ファイル名が連番になっていません7.1");
+				return;
 			}//if
 		}//for
-		//要素数を元にファイル名が連番になっているかの確認
-		String max = fileName.get(fileName.size() - 1);
-		String min = fileName.get(0);
-
-		int x = Integer.parseInt(max);
-		int y = Integer.parseInt(min);
-
-		if(!(x - y == fileName.size() - 1)) {
-			System.out.println("売上ファイル名が連番になっていません7");
-		}//if
 
 		//売上ファイルの読み込み
 		try {
@@ -141,17 +165,14 @@ public class UriageSystem {
 
 				//"salesFile"内の行数確認
 				if(salesFile.size() > 3 || salesFile.size() < 3) {
-					String error = fileName.get(i) + ".rcdのフォーマットが不正です8";
-						System.out.println(error);
-						return;
+					System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です8");
+					return;
 				}//if
 				//"branchFin"にmapされている値かどうかの判断
-//				if(!branchFin.containsKey(salesFile.get(0))) {
-//					System.out.println("支店定義ファイルのフォーマットが不正です9");
-//				} else if(!salesFile.get(0).matches("^\\d{3}$")) {
-//					System.out.println("支店定義ファイルのフォーマットが不正です10");
-//					return;
-//				}//if
+				if(!branchFin.containsKey(salesFile.get(0))) {
+					System.out.println(fileName.get(i) + ".rcdの支店コードが不正です9");
+					return;
+				}//if
 				//"salesFile"1行目の支店コードをキーにして金額を集計
 				int branchSum = branchFin.get(salesFile.get(0));
 				int branchSal = Integer.parseInt(salesFile.get(2));
@@ -166,11 +187,11 @@ public class UriageSystem {
 					System.out.println("合計金額が10桁を超えました11");
 					return;
 				}//if
-//				//"commodityFin"にmapされている値かどうかの判断
-//				if(!commodityFin.containsKey(salesFile.get(1))) {
-//					System.out.println("商品定義ファイルのフォーマットが不正です12");
-//					return;
-//				}//if
+				//"commodityFin"にmapされている値かどうかの判断
+				if(!commodityFin.containsKey(salesFile.get(1))) {
+					System.out.println(fileName.get(i) + ".rcdの商品コードが不正です12");
+					return;
+				}//if
 				//"salesFin"2行目の商品コードをキーにして金額を集計
 				int commoditySum = commodityFin.get(salesFile.get(1));
 				int commoditySal = Integer.parseInt(salesFile.get(2));
@@ -187,13 +208,14 @@ public class UriageSystem {
 				}//if
 			}//for
 		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました14");
+			System.out.println("予期せぬエラーが発生しました14");
+			return;
 		}//try～catch
 
 		//支店別集計ファイル
 		try {
 			//ファイルに出力
-			File branchFile = new File(args[0],"branch.out");
+			File branchFile = new File(args[0] + File.separator + "branch.out");
 			FileWriter fw = new FileWriter(branchFile);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter pw = new PrintWriter(bw);
@@ -216,14 +238,21 @@ public class UriageSystem {
 				pw.println(branchKey + "," + branchName + "," + branchSum);
 			}//for
 			bw.close();
+
+			if(!branchFile.canRead()) {
+				System.out.println("予期せぬエラーが発生しました");
+			} else if(!branchFile.canWrite()) {
+				System.out.println("予期せぬエラーが発生しました");
+			}
 		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました15");
+			System.out.println("予期せぬエラーが発生しました15");
+			return;
 		}//try～catch
 
 		//商品別集計ファイル
 		try {
 			//ファイルに出力
-			File commodityFile = new File(args[0],"commodity.out");
+			File commodityFile = new File(args[0] + File.separator + "commodity.out");
 			FileWriter fw = new FileWriter(commodityFile);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter pw = new PrintWriter(bw);
@@ -247,10 +276,16 @@ public class UriageSystem {
 				pw.println(commodityKey + "," + commodityName + "," + commoditySum);
 			}//for
 			bw.close();
-		} catch(IOException e) {
-			System.out.println(e + "予期せぬエラーが発生しました16");
-		}//try～catch
 
+			if(!commodityFile.canRead()) {
+				System.out.println("予期せぬエラーが発生しました");
+			} else if(!commodityFile.canWrite()) {
+				System.out.println("予期せぬエラーが発生しました");
+			}
+		} catch(IOException e) {
+			System.out.println("予期せぬエラーが発生しました16");
+			return;
+		}//try～catch
 	}//main
 }//class
 
