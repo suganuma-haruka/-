@@ -162,7 +162,6 @@ public class UriageSystem {
 					salesFile.add(s);
 				}//while
 				br.close();
-
 				//"salesFile"内の行数確認
 				if(salesFile.size() > 3 || salesFile.size() < 3) {
 					System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です");
@@ -182,8 +181,6 @@ public class UriageSystem {
 				branchFin.put(salesFile.get(0),braTotalSum);
 
 				//合計金額が10桁を超えたときのエラー
-//				String braStr = Integer.toString(braTotalSum);
-//				if(braStr.matches("^\\d{10,}")) {
 				if(braTotalSum > 999999999) {
 					System.out.println("合計金額が10桁を超えました");
 					return;
@@ -202,8 +199,6 @@ public class UriageSystem {
 				commodityFin.put(salesFile.get(1),comTotalSum);
 
 				//合計金額が10桁を超えたときのエラー
-//				String comStr = Integer.toString(comTotalSum);
-//				if(comStr.matches("^\\d{10,}")) {
 				if(comTotalSum > 999999999) {
 					System.out.println("合計金額が10桁を超えました");
 					return;
@@ -222,7 +217,6 @@ public class UriageSystem {
 				FileWriter fw = new FileWriter(branchFile);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter pw = new PrintWriter(bw);
-
 				//Map.Entryのリストを作る
 				List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(branchFin.entrySet());
 				//ComparatorでMap.Entryの値を比較
@@ -270,7 +264,6 @@ public class UriageSystem {
 				FileWriter fw = new FileWriter(commodityFile);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter pw = new PrintWriter(bw);
-
 				//降順にソート
 				//Map.Entryのリストを作る
 				List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(commodityFin.entrySet());
