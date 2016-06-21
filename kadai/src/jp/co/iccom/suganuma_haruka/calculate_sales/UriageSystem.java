@@ -115,13 +115,14 @@ public class UriageSystem {
 
 			//指定したディレクトリから"半角数字8桁.rcd"に該当するファイルの検索
 			for(int i = 0; i < files.length; i++) {
-				String comCode = files[i].getName();
-				if(!comCode.matches("^\\d{8}.rcd$")) {
+				String rcdName = files[i].getName();
+				if(rcdName.matches("^\\d{8}.rcd$") && rcdName.length() == 12) {
+					String[] items = (files[i].getName()).split("\\.");
+					fileName.add(items[0]);
+				} else if(rcdName.contains("rcd") && rcdName.length() != 12) {
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
 				}
-				String[] items = (files[i].getName()).split("\\.");
-				fileName.add(items[0]);
 			}
 
 			//要素数を元にファイル名が連番になっているかの確認
