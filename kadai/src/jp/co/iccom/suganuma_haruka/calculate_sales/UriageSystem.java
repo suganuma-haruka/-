@@ -131,7 +131,7 @@ public class UriageSystem {
 				String min = fileName.get(0);
 				int maxName = Integer.parseInt(max);
 				int minName = Integer.parseInt(min);
-				if(maxName - minName != fileName.size() - 1 || files[i].isDirectory()) { //ファイル名が連番ではない場合のエラー
+				if(maxName - minName != fileName.size() - 1) { //ファイル名が連番ではない場合のエラー
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
 				}
@@ -192,7 +192,7 @@ public class UriageSystem {
 					}
 				}
 			} catch(IOException e) {
-				System.out.println("予期せぬエラーが発生しました");
+				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			} catch(NumberFormatException e) {
 				System.out.println("合計金額が10桁を超えました");
@@ -233,6 +233,7 @@ public class UriageSystem {
 					long branchSum = e.getValue();
 					pw.println(branchKey + "," + branchName + "," + branchSum); //出力
 				}
+				pw.close();
 			} catch(IOException e) {
 				System.out.println("予期せぬエラーが発生しました");
 				return;
@@ -271,6 +272,7 @@ public class UriageSystem {
 					long commoditySum = e.getValue();
 					pw.println(commodityKey + "," + commodityName + "," + commoditySum); //出力
 				}
+				pw.close();
 			} catch(IOException e) {
 				System.out.println("予期せぬエラーが発生しました");
 				return;
