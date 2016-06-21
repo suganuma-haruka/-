@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/売上集計システム/src/jp/co/iccom/suganuma_haruka/calculate_sales/UriageSystem.java"/>
+<listEntry value="/売上集計システム"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
+<listEntry value="4"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="jp.co.iccom.suganuma_haruka.calculate_sales.UriageSystem"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="C:\\java\\"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="C:\java"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="売上集計システム"/>
 </launchConfiguration>
