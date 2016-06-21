@@ -30,19 +30,20 @@ public class UriageSystem {
 		HashMap<String, String> commodityCode = new HashMap<String, String>();
 
 		//売上0円のHashMap
-		HashMap<String,Integer> branchFin = new HashMap<String,Integer>();
+		HashMap<String,Long> branchFin = new HashMap<String,Long>();
 
 		//商品0円のHashMap
-		HashMap<String,Integer> commodityFin = new HashMap<String,Integer>();
+		HashMap<String,Long> commodityFin = new HashMap<String,Long>();
 
+		BufferedReader brBranch = null;
 		try {
 			//支店定義ファイルの読み込み
 			File branch = new File(args[0] + File.separator + "branch.lst");
 			FileReader fr = new FileReader(branch);
-			BufferedReader br = new BufferedReader(fr);
+			brBranch = new BufferedReader(fr);
 			String s;
 			//1行ずつ読み込んだ値を"s"に代入し、"null"でなければ｛｝の処理を実行
-			while((s = br.readLine()) != null) {
+			while((s = brBranch.readLine()) != null) {
 				//ファイルのデータを","で分割
 				String[] items = s.split(",");
 				//変数"i"を"0"で初期化し、"i"の値が"items"の要素数より小さい場合に{}を実行し、
@@ -61,10 +62,9 @@ public class UriageSystem {
 				//shitenCodepにキーと値を追加
 				branchCode.put(items[0], items[1]);
 				//uriageMapにキーと"0"を追加
-				branchFin.put(items[0],0);
+				branchFin.put(items[0],(long) 0);
 			}//while
 			//BufferReaderのオブジェクト終了
-			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
 			System.out.println("支店定義ファイルが存在しません");
@@ -72,15 +72,23 @@ public class UriageSystem {
 		} catch(ArrayIndexOutOfBoundsException e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
-		}//try～catch
+		} finally {
+			try {
+				brBranch.close();
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//try～catch
+		}//try～catch～finally
 
+		BufferedReader brCommodity = null;
 		try {
 			//商品定義ファイルの読み込み
 			File commodity = new File(args[0] + File.separator + "commodity.lst");
 			FileReader fr = new FileReader(commodity);
-			BufferedReader br = new BufferedReader(fr);
+			brCommodity = new BufferedReader(fr);
 			String s;
-			while((s = br.readLine()) != null) {
+			while((s = brCommodity.readLine()) != null) {
 				//ファイルのデータを","で分割
 				String[] items = s.split(",");
 				for(int i = 0; i < items.length; i++) {
@@ -97,10 +105,9 @@ public class UriageSystem {
 				//syouhinCodeにキーと値を追加
 				commodityCode.put(items[0], items[1]);
 				//syouhinMapにキーと"0"と値を追加
-				commodityFin.put(items[0], 0);
+				commodityFin.put(items[0], (long) 0);
 			}//while
 			//BufferReaderのオブジェクト終了
-			br.close();
 		//例外が発生したときの処理
 		} catch(IOException e) {
 			System.out.println("商品定義ファイルが存在しません");
@@ -108,7 +115,14 @@ public class UriageSystem {
 		} catch(ArrayIndexOutOfBoundsException e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
-		}//try～catch
+		} finally {
+			try {
+				brCommodity.close();
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//try～catch
+		}//try～catch～finally
 
 		//コマンドライン引数からディレクトリを指定
 		File file = new File(args[0]);
@@ -120,14 +134,16 @@ public class UriageSystem {
 		//指定したディレクトリから"半角数字8桁.rcd"に該当するファイルの検索
 		for(int i = 0; i < files.length; i++) {
 			String str = files[i].getName();
+			//"str"が8桁の半角数字、拡張子".rcd"かつ、文字列が12である時
 			if(str.matches("^\\d{8}.rcd$") && str.length() == 12) {
 				//該当ファイル名を"."で分割
 				String[] items = (files[i].getName()).split("\\.");
 				fileName.add(items[0]);
+			//文字列の末尾が"rcd"で、文字列が12ではない時
 			} else if(str.contains("rcd") && str.length() != 12) {
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
-			}
+			}//if～else
 		}//for
 
 		//要素数を元にファイル名が連番になっているかの確認
@@ -173,9 +189,9 @@ public class UriageSystem {
 					return;
 				}//if
 				//"salesFile"1行目の支店コードをキーにして金額を集計
-				int branchSum = branchFin.get(salesFile.get(0));
-				int branchSal = Integer.parseInt(salesFile.get(2));
-				int braTotalSum = branchSum + branchSal;
+				long branchSum = branchFin.get(salesFile.get(0));
+				long branchSal = Integer.parseInt(salesFile.get(2));
+				long braTotalSum = branchSum + branchSal;
 
 				//"branchFin"のmapに格納
 				branchFin.put(salesFile.get(0),braTotalSum);
@@ -191,9 +207,9 @@ public class UriageSystem {
 					return;
 				}//if
 				//"salesFin"2行目の商品コードをキーにして金額を集計
-				int commoditySum = commodityFin.get(salesFile.get(1));
-				int commoditySal = Integer.parseInt(salesFile.get(2));
-				int comTotalSum = commoditySum + commoditySal;
+				long commoditySum = commodityFin.get(salesFile.get(1));
+				long commoditySal = Integer.parseInt(salesFile.get(2));
+				long comTotalSum = commoditySum + commoditySal;
 
 				//"commodityFin"のmapに格納
 				commodityFin.put(salesFile.get(1),comTotalSum);
@@ -210,99 +226,97 @@ public class UriageSystem {
 		}//try～catch
 
 		//支店別集計ファイル
+		BufferedWriter bwBranch = null;
 		try {
 			//ファイルに出力
 			File branchFile = new File(args[0] + File.separator + "branch.out");
-			if(branchFile.exists()) { //ファイルの有無を確認
-				FileWriter fw = new FileWriter(branchFile);
-				BufferedWriter bw = new BufferedWriter(fw);
-				PrintWriter pw = new PrintWriter(bw);
-				//Map.Entryのリストを作る
-				List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(branchFin.entrySet());
-				//ComparatorでMap.Entryの値を比較
-				Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-					//比較関数
-					@Override
-					public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2) {
-						return o2.getValue(). compareTo(o1.getValue()); //降順
-					}
-				});
-				//ソートした値を組み合わせて出力
-				for(Map.Entry<String,Integer> e : entries) {
-					String branchKey = e.getKey();
-					String branchName = branchCode.get(e.getKey());
-					int branchSum = e.getValue();
-					pw.println(branchKey + "," + branchName + "," + branchSum);
-				}//for
-				bw.close();
-			} else {
-				//ファイルが無かった場合、新しく作成
-				try{
-					branchFile.createNewFile();
-				} catch(IOException e) {
-					System.out.println("支店別集計ファイルを作成しました");
-					return;
+			branchFile.createNewFile();
+			FileWriter fw = new FileWriter(branchFile);
+			bwBranch = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bwBranch);
+			//Map.Entryのリストを作る
+			List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(branchFin.entrySet());
+			//ComparatorでMap.Entryの値を比較
+			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+				//比較関数
+				@Override
+				public int compare(Map.Entry<String,Long> o1, Map.Entry<String,Long> o2) {
+					return o2.getValue(). compareTo(o1.getValue()); //降順ソート
 				}
-			}
-				if(!branchFile.canRead()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				} else if(!branchFile.canWrite()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				}
+			});
+			//ソートした値を組み合わせて出力
+			for(Map.Entry<String,Long> e : entries) {
+				String branchKey = e.getKey();
+				String branchName = branchCode.get(e.getKey());
+				long branchSum = e.getValue();
+				pw.println(branchKey + "," + branchName + "," + branchSum); //出力
+			}//for
+			//読み込み可能か確認
+			if(!branchFile.canRead()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			//書き込み可能か確認
+			} else if(!branchFile.canWrite()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//if～else
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
-		}//try～catch
+		} finally {
+			try {
+				bwBranch.close();
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//try～catch
+		}//try～catch～finally
 
 		//商品別集計ファイル
+		BufferedWriter bwCommodity = null;
 		try {
 			//ファイルに出力
 			File commodityFile = new File(args[0] + File.separator + "commodity.out");
-			if(commodityFile.exists()) { //ファイルの有無を確認
-				FileWriter fw = new FileWriter(commodityFile);
-				BufferedWriter bw = new BufferedWriter(fw);
-				PrintWriter pw = new PrintWriter(bw);
-				//降順にソート
-				//Map.Entryのリストを作る
-				List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(commodityFin.entrySet());
-				//ComparatorでMap.Entryの値を比較
-				Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-					//比較関数
-					@Override
-					public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2) {
-						return o2.getValue(). compareTo(o1.getValue()); //降順
-					}
-				});
-				//ソートした値を組み合わせて出力
-				for(Map.Entry<String,Integer> e : entries) {
-					String commodityKey = e.getKey();
-					String commodityName = commodityCode.get(e.getKey());
-					int commoditySum = e.getValue();
-					pw.println(commodityKey + "," + commodityName + "," + commoditySum);
-				}//for
-				bw.close();
-			} else {
-				//ファイルが無かった場合、新しく作成
-				try{
-					commodityFile.createNewFile();
-				} catch(IOException e) {
-					System.out.println("商品別集計ファイルを作成しました");
-					return;
+			commodityFile.createNewFile();
+			FileWriter fw = new FileWriter(commodityFile);
+			bwCommodity = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bwCommodity);
+			//Map.Entryのリストを作る
+			List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(commodityFin.entrySet());
+			//ComparatorでMap.Entryの値を比較
+			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+				//比較関数
+				@Override
+				public int compare(Map.Entry<String,Long> o1, Map.Entry<String,Long> o2) {
+					return o2.getValue(). compareTo(o1.getValue()); //降順ソート
 				}
-			}
-				if(!commodityFile.canRead()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				} else if(!commodityFile.canWrite()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				}
+			});
+			//ソートした値を組み合わせて出力
+			for(Map.Entry<String,Long> e : entries) {
+				String commodityKey = e.getKey();
+				String commodityName = commodityCode.get(e.getKey());
+				long commoditySum = e.getValue();
+				pw.println(commodityKey + "," + commodityName + "," + commoditySum); //出力
+			}//for
+			//読み込み可能か確認
+			if(!commodityFile.canRead()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			//書き込み可能か確認
+			} else if(!commodityFile.canWrite()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//if～else
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
-		}//try～catch
+		} finally {
+			try {
+				bwCommodity.close();
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}//try～catch
+		}//try～catch～finally
 	}//main
 }//class
-

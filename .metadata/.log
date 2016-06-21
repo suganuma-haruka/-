@@ -668,3 +668,19 @@ Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.
 
 !ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-20 14:33:31.716
 !MESSAGE properties removing for project 'main.test'
+!SESSION 2016-06-21 08:43:39.223 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.7.0_51
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.jee.product
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-21 08:44:12.529
+!MESSAGE properties loading for project 'RemoteSystemsTempFiles'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-21 08:44:13.075
+!MESSAGE properties loading for project 'test'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-21 08:44:13.075
+!MESSAGE properties loading for project '売上集計システム'
