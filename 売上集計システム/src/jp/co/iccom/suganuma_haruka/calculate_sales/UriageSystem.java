@@ -223,6 +223,9 @@ public class UriageSystem {
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
+		} catch(NumberFormatException e) {
+			System.out.println("合計金額が10桁を超えました");
+			return;
 		}//try～catch
 
 		//支店別集計ファイル
