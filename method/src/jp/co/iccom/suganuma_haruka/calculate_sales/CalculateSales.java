@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class calculateSales {
+public class CalculateSales {
 	public static void main(String[] args) {
 		//コマンドライン引数の中身の確認
 		if(args.length != 1) {
