@@ -89,37 +89,12 @@ public class method {
 						System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です");
 						return;
 					}
-					//"branchTotal"にmapされている値かどうかの判断
-					if(!branchTotal.containsKey(salesFile.get(0))) {
-						System.out.println(fileName.get(i) + ".rcdの支店コードが不正です");
+					//支店コードで集計
+					if(!collection(branchTotal, salesFile, 0, fileName, i, "支店")) {
 						return;
 					}
-					//"salesFile"1行目の支店コードをキーにして金額を集計
-					long branchSum = branchTotal.get(salesFile.get(0));
-					long braComSal = Integer.parseInt(salesFile.get(2));
-					Long braTotalSum = branchSum + braComSal;
-
-					branchTotal.put(salesFile.get(0), braTotalSum);
-
-					//合計金額が10桁を超えたときのエラー
-					if(braTotalSum.toString().length() > 10) {
-						System.out.println("合計金額が10桁を超えました");
-						return;
-					}
-					//"commodityTotal"にmapされている値かどうかの判断
-					if(!commodityTotal.containsKey(salesFile.get(1))) {
-						System.out.println(fileName.get(i) + ".rcdの商品コードが不正です");
-						return;
-					}
-					//"salesFile"2行目の商品コードをキーにして金額を集計
-					long commoditySum = commodityTotal.get(salesFile.get(1));
-					Long comTotalSum = commoditySum + braComSal;
-
-					commodityTotal.put(salesFile.get(1), comTotalSum);
-
-					//合計金額が10桁を超えたときのエラー
-					if(comTotalSum.toString().length() > 10) {
-						System.out.println("合計金額が10桁を超えました");
+					//商品コードで集計
+					if(!collection(commodityTotal, salesFile, 1, fileName, i,"商品")) {
 						return;
 					}
 				}
@@ -149,6 +124,28 @@ public class method {
 			return;
 		}
 	}
+
+	//売上集計メソッド
+	public static boolean collection(HashMap<String, Long> fileTotal, ArrayList<String> collectionFile,
+			int getNumber, ArrayList<String> fileNumberName, int i, String Name) {
+			//Mapされている値かどうかの判定
+			if(!fileTotal.containsKey(collectionFile.get(getNumber))) {
+				System.out.println(fileNumberName.get(i) + ".rcdの" + Name + "コードが不正です");
+				return false;
+			}
+			//"salesFile"1行目の支店コードをキーにして金額を集計
+			long zero = fileTotal.get(collectionFile.get(getNumber));
+			long sum = Integer.parseInt(collectionFile.get(2));
+			Long TotalSum = zero + sum;
+
+			//合計金額が10桁を超えたときのエラー
+			if(TotalSum.toString().length() > 10) {
+				System.out.println("合計金額が10桁を超えました");
+				return false;
+			}
+			fileTotal.put(collectionFile.get(getNumber), TotalSum);
+			return true;
+			}
 
 	//定義ファイル読み込みメソッド
 	public static boolean readFile(String directoryPath, String lstFile,
