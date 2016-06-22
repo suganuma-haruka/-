@@ -203,61 +203,88 @@ public class UriageSystem {
 				}
 			}
 
-			//支店別集計結果の呼び出し
-			fileOutput(branchTotal, args[0], "branch.out", branchCode);
-			//商品別集計結果の呼び出し
-			fileOutput(commodityTotal, args[0], "commodity.out", commodityCode);
-
-		} catch(Exception e) {
-			System.out.println("予期せぬエラーが発生しました");
-			return;
-		}
-	}
-
-	// 売上集計出力メソッド
-	public static void fileOutput(HashMap<String, Long> fileTotal, String directoryPath,
-			String fileName, HashMap<String, String> fileOutCode) {
-
-			BufferedWriter bw = null;
+			//支店別集計ファイル
+			BufferedWriter bwBranch = null;
 			try {
 				//ファイルに出力
-				File outputFile = new File(directoryPath, fileName);
-				outputFile.createNewFile();
-				bw = new BufferedWriter(new FileWriter(outputFile));
-				PrintWriter pw = new PrintWriter(bw);
-				//読み込み可能か確認、書き込み可能か確認
-				if(!outputFile.canRead() || !outputFile.canWrite()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				}
+				File branchFile = new File(args[0] + File.separator + "branch.out");
+				branchFile.createNewFile();
+				FileWriter fw = new FileWriter(branchFile);
+				bwBranch = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bwBranch);
 				//Map.Entryのリストを作る
-				List<Map.Entry<String, Long>> entries = new ArrayList<Map.Entry<String, Long>>(fileTotal.entrySet());
+				List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(branchTotal.entrySet());
 				//ComparatorでMap.Entryの値を比較
-				Collections.sort(entries, new Comparator<Map.Entry<String, Long>>() {
+				Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 					//比較関数
 					@Override
-					public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+					public int compare(Map.Entry<String,Long> o1, Map.Entry<String,Long> o2) {
 						return o2.getValue(). compareTo(o1.getValue()); //降順ソート
 					}
 				});
 				//ソートした値を組み合わせて出力
-				for(Map.Entry<String, Long> e : entries) {
-					String Key = e.getKey();
-					String Name = fileOutCode.get(e.getKey());
-					long Sum = e.getValue();
-					pw.println(Key + "," + Name + "," + Sum); //出力
+				for(Map.Entry<String,Long> e : entries) {
+					String branchKey = e.getKey();
+					String branchName = branchCode.get(e.getKey());
+					long branchSum = e.getValue();
+					pw.println(branchKey + "," + branchName + "," + branchSum); //出力
+				}
+				//読み込み可能か確認、書き込み可能か確認
+				if(!branchFile.canRead() || !branchFile.canWrite()) {
+					System.out.println("予期せぬエラーが発生しました");
+					return;
 				}
 			} catch(IOException e) {
 				System.out.println("予期せぬエラーが発生しました");
 				return;
 			} finally {
-				try {
-					if(bw != null) {
-						bw.close();
-					}
-				} catch(IOException e) {
-					System.out.println("予期せぬエラーが発生しました");
+				if(bwBranch != null) {
+					bwBranch.close();
 				}
 			}
+
+			//商品別集計ファイル
+			BufferedWriter bwCommodity = null;
+			try {
+				//ファイルに出力
+				File commodityFile = new File(args[0] + File.separator + "commodity.out");
+				commodityFile.createNewFile();
+				FileWriter fw = new FileWriter(commodityFile);
+				bwCommodity = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bwCommodity);
+				//Map.Entryのリストを作る
+				List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(commodityTotal.entrySet());
+				//ComparatorでMap.Entryの値を比較
+				Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+					//比較関数
+					@Override
+					public int compare(Map.Entry<String,Long> o1, Map.Entry<String,Long> o2) {
+						return o2.getValue(). compareTo(o1.getValue()); //降順ソート
+					}
+				});
+				//ソートした値を組み合わせて出力
+				for(Map.Entry<String,Long> e : entries) {
+					String commodityKey = e.getKey();
+					String commodityName = commodityCode.get(e.getKey());
+					long commoditySum = e.getValue();
+					pw.println(commodityKey + "," + commodityName + "," + commoditySum); //出力
+				}
+				//読み込み可能か確認、書き込み可能か確認
+				if(!commodityFile.canRead() || !commodityFile.canWrite()) {
+					System.out.println("予期せぬエラーが発生しました");
+					return;
+				}
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			} finally {
+				if(bwCommodity != null) {
+					bwCommodity.close();
+				}
+			}
+		} catch(Exception e) {
+			System.out.println("予期せぬエラーが発生しました");
+			return;
+		}
 	}
 }

@@ -766,3 +766,18 @@ Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.
 
 !ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 08:54:53.594
 !MESSAGE properties loading for project '売上集計システム'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 09:55:50.807
+!MESSAGE properties loading for project 'method'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 09:57:32.041
+!MESSAGE properties loading for project 'methodDivid'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 09:57:47.666
+!MESSAGE properties removing for project 'methodDivid'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 09:58:36.054
+!MESSAGE properties removing for project 'method'
+
+!ENTRY jp.gr.java_conf.ussiy.app.propedit 1 0 2016-06-22 09:58:49.334
+!MESSAGE properties loading for project 'method'
