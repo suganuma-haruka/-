@@ -1,4 +1,4 @@
-package method;
+package jp.co.iccom.suganuma_haruka.calculate_sales;
 
 
 import java.io.BufferedReader;
