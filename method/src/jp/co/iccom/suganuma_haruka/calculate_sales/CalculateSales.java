@@ -111,6 +111,7 @@ public class CalculateSales {
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		}
 	}
 
