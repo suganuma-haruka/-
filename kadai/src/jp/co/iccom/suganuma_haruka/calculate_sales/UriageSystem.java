@@ -1,6 +1,5 @@
 package jp.co.iccom.suganuma_haruka.calculate_sales;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,16 +23,13 @@ public class UriageSystem {
 				return;
 			}
 
-			//mapに支店定義ファイルの中身を格納
+			//支店定義ファイルのHashMap
 			HashMap<String, String> branchCode = new HashMap<String, String>();
-
-			//mapに商品定義ファイルの中身を格納
+			//商品定義ファイルのHashMap
 			HashMap<String, String> commodityCode = new HashMap<String, String>();
-
-			//売上0円のHashMap
+			//支店別売上集計のHashMap
 			HashMap<String, Long> branchTotal = new HashMap<String, Long>();
-
-			//商品0円のHashMap
+			//商品別売上集計のHashMap
 			HashMap<String, Long> commodityTotal = new HashMap<String, Long>();
 
 			BufferedReader brBranch = null;
@@ -54,9 +50,9 @@ public class UriageSystem {
 						System.out.println("支店定義ファイルのフォーマットが不正です");
 						return;
 					}
-					//shitenCodepにキーと値を追加
+					//支店定義ファイルのMapにキーと値を追加
 					branchCode.put(branchitems[0], branchitems[1]);
-					//uriageMapにキーと"0"を追加
+					//支店別集計集計のMapにキーと"0"を追加
 					branchTotal.put(branchitems[0], 0L);
 				}
 			} catch(IOException e) {
@@ -85,13 +81,13 @@ public class UriageSystem {
 					String[] commodityitems = commodityLst.split(",");
 					//商品コードが半角英数字8桁でない場合のエラー処理
 					String comCode = commodityitems[0];
-					if(!comCode.matches("^\\w{8}$") || commodityitems.length > 2 || commodityitems.length < 2) {
+					if(!comCode.matches("^\\w{8}$") || commodityitems.length != 2) {
 						System.out.println("商品定義ファイルのフォーマットが不正です");
 						return;
 					}
-					//syouhinCodeにキーと値を追加
+					//商品定義ファイルのMapにキーと値を追加
 					commodityCode.put(commodityitems[0], commodityitems[1]);
-					//syouhinMapにキーと"0"と値を追加
+					//商品別売上集計のMapにキーと"0"と値を追加
 					commodityTotal.put(commodityitems[0], 0L);
 				}
 			//例外が発生したときの処理
@@ -124,17 +120,16 @@ public class UriageSystem {
 					return;
 				}
 			}
-
+			//昇順ソート
+			Collections.sort(fileName);
 			//要素数を元にファイル名が連番になっているかの確認
-			for (int i = 0 ; i < files.length ; i++){
-				String max = fileName.get(fileName.size() - 1);
-				String min = fileName.get(0);
-				int maxName = Integer.parseInt(max);
-				int minName = Integer.parseInt(min);
-				if(maxName - minName != fileName.size() - 1) { //ファイル名が連番ではない場合のエラー
-					System.out.println("売上ファイル名が連番になっていません");
-					return;
-				}
+			String max = fileName.get(fileName.size() - 1);
+			String min = fileName.get(0);
+			int maxName = Integer.parseInt(max);
+			int minName = Integer.parseInt(min);
+			if(maxName - minName != fileName.size() - 1) { //ファイル名が連番ではない場合のエラー
+				System.out.println("売上ファイル名が連番になっていません");
+				return;
 			}
 
 			//売上ファイルの読み込み
@@ -150,46 +145,47 @@ public class UriageSystem {
 					while((rcdName = brRcd.readLine()) != null) {
 						salesFile.add(rcdName);
 					}
-					//"salesFile"内の行数確認
-					if(salesFile.size() > 3 || salesFile.size() < 3) {
+					//売上ファイル内の行数確認
+					if(salesFile.size() != 3) {
 						System.out.println(fileName.get(i) + ".rcdのフォーマットが不正です");
 						return;
 					}
-					//"branchTotal"にmapされている値かどうかの判断
+					//支店別売上集計のMapに格納されている値かどうかの判定
 					if(!branchTotal.containsKey(salesFile.get(0))) {
 						System.out.println(fileName.get(i) + ".rcdの支店コードが不正です");
 						return;
 					}
-					//"salesFile"1行目の支店コードをキーにして金額を集計
+					//売上ファイルの1行目の支店コードをキーにして値(金額)を集計
 					long branchSum = branchTotal.get(salesFile.get(0));
 					long braComSal = Integer.parseInt(salesFile.get(2));
 					Long braTotalSum = branchSum + braComSal;
-
-					//"branchTotal"のmapに格納
-					branchTotal.put(salesFile.get(0), braTotalSum);
 
 					//合計金額が10桁を超えたときのエラー
 					if(braTotalSum.toString().length() > 10) {
 						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
-					//"commodityTotal"にmapされている値かどうかの判断
+
+					//支店別売上集計のMapに格納
+					branchTotal.put(salesFile.get(0), braTotalSum);
+
+					//商品別売上集計のMapに格納されている値かどうかの判定
 					if(!commodityTotal.containsKey(salesFile.get(1))) {
 						System.out.println(fileName.get(i) + ".rcdの商品コードが不正です");
 						return;
 					}
-					//"salesFile"2行目の商品コードをキーにして金額を集計
+					//売上ファイルの2行目の商品コードをキーにして値(金額)を集計
 					long commoditySum = commodityTotal.get(salesFile.get(1));
 					Long comTotalSum = commoditySum + braComSal;
-
-					//"commodityTotal"のmapに格納
-					commodityTotal.put(salesFile.get(1), comTotalSum);
 
 					//合計金額が10桁を超えたときのエラー
 					if(comTotalSum.toString().length() > 10) {
 						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
+
+					//商品別売上集計のMapに格納
+					commodityTotal.put(salesFile.get(1), comTotalSum);
 				}
 			} catch(IOException e) {
 				System.out.println("売上ファイル名が連番になっていません");
@@ -203,12 +199,11 @@ public class UriageSystem {
 				}
 			}
 
-			//支店別集計ファイル
+			//支店別売上集計ファイル
 			BufferedWriter bwBranch = null;
 			try {
 				//ファイルに出力
 				File branchFile = new File(args[0] + File.separator + "branch.out");
-				branchFile.createNewFile();
 				FileWriter fw = new FileWriter(branchFile);
 				bwBranch = new BufferedWriter(fw);
 				PrintWriter pw = new PrintWriter(bwBranch);
@@ -223,10 +218,10 @@ public class UriageSystem {
 					}
 				});
 				//ソートした値を組み合わせて出力
-				for(Map.Entry<String,Long> e : entries) {
-					String branchKey = e.getKey();
-					String branchName = branchCode.get(e.getKey());
-					long branchSum = e.getValue();
+				for(Map.Entry<String,Long> entrie : entries) {
+					String branchKey = entrie.getKey();
+					String branchName = branchCode.get(entrie.getKey());
+					long branchSum = entrie.getValue();
 					pw.println(branchKey + "," + branchName + "," + branchSum); //出力
 				}
 				//読み込み可能か確認、書き込み可能か確認
@@ -243,12 +238,11 @@ public class UriageSystem {
 				}
 			}
 
-			//商品別集計ファイル
+			//商品別売上集計ファイル
 			BufferedWriter bwCommodity = null;
 			try {
 				//ファイルに出力
 				File commodityFile = new File(args[0] + File.separator + "commodity.out");
-				commodityFile.createNewFile();
 				FileWriter fw = new FileWriter(commodityFile);
 				bwCommodity = new BufferedWriter(fw);
 				PrintWriter pw = new PrintWriter(bwCommodity);
@@ -263,10 +257,10 @@ public class UriageSystem {
 					}
 				});
 				//ソートした値を組み合わせて出力
-				for(Map.Entry<String,Long> e : entries) {
-					String commodityKey = e.getKey();
-					String commodityName = commodityCode.get(e.getKey());
-					long commoditySum = e.getValue();
+				for(Map.Entry<String,Long> entrie : entries) {
+					String commodityKey = entrie.getKey();
+					String commodityName = commodityCode.get(entrie.getKey());
+					long commoditySum = entrie.getValue();
 					pw.println(commodityKey + "," + commodityName + "," + commoditySum); //出力
 				}
 				//読み込み可能か確認、書き込み可能か確認
