@@ -46,7 +46,7 @@ public class UriageSystem {
 					String[] branchitems = branchLst.split(",");
 					//支店コードが3桁でない場合のエラー処理
 					String braCode = branchitems[0];
-					if(!braCode.matches("^\\d{3}$") || branchitems.length > 2 || branchitems.length < 2) {
+					if(!braCode.matches("^\\d{3}$") || branchitems.length != 2) {
 						System.out.println("支店定義ファイルのフォーマットが不正です");
 						return;
 					}
