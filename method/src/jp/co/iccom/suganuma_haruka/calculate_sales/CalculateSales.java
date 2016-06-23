@@ -31,7 +31,6 @@ public class CalculateSales {
 
 
 		try {
-			//コマンドライン引数の中身の確認
 			if(args.length != 1) {
 				System.out.println("予期せぬエラーが発生しました");
 				return;
@@ -46,55 +45,54 @@ public class CalculateSales {
 				return;
 			}
 
-			//コマンドライン引数からディレクトリを指定
 			File files[] = new File(args[0]).listFiles();
 
 			ArrayList<String> salesList = new ArrayList<String>();
 
 			//"半角数字8桁.rcd"に該当するファイルを格納
-				for(int i = 0; i < files.length; i++) {
-					String fileName = files[i].getName();
-					if(fileName.matches("^\\d{8}.rcd$") && files[i].isFile()) {
-						String[] items = (files[i].getName()).split("\\.");
-						salesList.add(items[0]);
-					}
+			for(int i = 0; i < files.length; i++) {
+				String fileName = files[i].getName();
+				if(fileName.matches("^\\d{8}.rcd$") && files[i].isFile()) {
+					String[] items = (files[i].getName()).split("\\.");
+					salesList.add(items[0]);
 				}
-				//昇順ソート
-				Collections.sort(salesList);
-				//要素数を元にファイル名が連番になっているかの確認
-				String max = salesList.get(salesList.size() - 1);
-				String min = salesList.get(0);
-				int maxFileNumber = Integer.parseInt(max);
-				int minFileNumber = Integer.parseInt(min);
-				if(maxFileNumber - minFileNumber != salesList.size() - 1) {
-					System.out.println("売上ファイル名が連番になっていません");
-					return;
-				}
+			}
+			//昇順ソート
+			Collections.sort(salesList);
+			//要素数を元にファイル名が連番になっているかの確認
+			String max = salesList.get(salesList.size() - 1);
+			String min = salesList.get(0);
+			int maxFileNumber = Integer.parseInt(max);
+			int minFileNumber = Integer.parseInt(min);
+			if(maxFileNumber - minFileNumber != salesList.size() - 1) {
+				System.out.println("売上ファイル名が連番になっていません");
+				return;
+			}
 
 			//売上ファイルの読み込み
-				for(int i = 0; i < salesList.size(); i++) {
-					br = new BufferedReader(new FileReader(new File(args[0], salesList.get(i) + ".rcd")));
-					String rcdName;
+			for(int i = 0; i < salesList.size(); i++) {
+				br = new BufferedReader(new FileReader(new File(args[0], salesList.get(i) + ".rcd")));
+				String rcdName;
 
-					ArrayList<String> salesFile = new ArrayList<String>();
+				ArrayList<String> salesFile = new ArrayList<String>();
 
-					while((rcdName = br.readLine()) != null) {
-						salesFile.add(rcdName);
-					}
-					//売上ファイル内の行数確認
-					if(salesFile.size() != 3) {
-						System.out.println(salesList.get(i) + ".rcdのフォーマットが不正です");
-						return;
-					}
-					//支店コードで売上集計
-					if(!salesSummary(branchSales, salesFile, 0, salesList.get(i), "支店")) {
-						return;
-					}
-					//商品コードで売上集計
-					if(!salesSummary(commoditySales, salesFile, 1, salesList.get(i),"商品")) {
-						return;
-					}
+				while((rcdName = br.readLine()) != null) {
+					salesFile.add(rcdName);
 				}
+				//売上ファイル内の行数確認
+				if(salesFile.size() != 3) {
+					System.out.println(salesList.get(i) + ".rcdのフォーマットが不正です");
+					return;
+				}
+				//支店コードで売上集計
+				if(!salesSummary(branchSales, salesFile, 0, salesList.get(i), "支店")) {
+					return;
+				}
+				//商品コードで売上集計
+				if(!salesSummary(commoditySales, salesFile, 1, salesList.get(i),"商品")) {
+					return;
+				}
+			}
 
 			//支店別売上集計結果の呼び出し
 			if(!fileOutput(branchSales, new File(args[0], "branch.out"), branchMap)) {
@@ -197,17 +195,14 @@ public class CalculateSales {
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
 			}
-			//Map.Entryのリストを作る
+			//降順ソート
 			List<Map.Entry<String, Long>> entries = new ArrayList<Map.Entry<String, Long>>(readSalesMap.entrySet());
-			//ComparatorでMap.Entryの値を比較
 			Collections.sort(entries, new Comparator<Map.Entry<String, Long>>() {
-				//比較関数
 				@Override
 				public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
-					return o2.getValue(). compareTo(o1.getValue()); //降順ソート
+					return o2.getValue(). compareTo(o1.getValue());
 				}
 			});
-			//ファイル出力
 			for(Map.Entry<String, Long> entry : entries) {
 				String keyCode = entry.getKey();
 				String eachName = readListMap.get(entry.getKey());
