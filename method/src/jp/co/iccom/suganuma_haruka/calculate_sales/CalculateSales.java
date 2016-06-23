@@ -18,6 +18,18 @@ import java.util.Map;
 
 public class CalculateSales {
 	public static void main(String[] args) {
+		BufferedReader br = null;
+
+		//支店定義ファイルのHashMap
+		HashMap<String, String> branchMap = new HashMap<String, String>();
+		//商品定義ファイルのHashMap
+		HashMap<String, String> commodityMap = new HashMap<String, String>();
+		//支店別売上集計のHashMap
+		HashMap<String, Long> branchSales = new HashMap<String, Long>();
+		//商品別売上集計のHashMap
+		HashMap<String, Long> commoditySales = new HashMap<String, Long>();
+
+
 		try {
 			//コマンドライン引数の中身の確認
 			if(args.length != 1) {
@@ -25,54 +37,43 @@ public class CalculateSales {
 				return;
 			}
 
-			//支店定義ファイルのHashMap
-			HashMap<String, String> branchDfinition = new HashMap<String, String>();
-			//商品定義ファイルのHashMap
-			HashMap<String, String> commodityDifinition = new HashMap<String, String>();
-			//支店別売上集計のHashMap
-			HashMap<String, Long> branchSales = new HashMap<String, Long>();
-			//商品別売上集計のHashMap
-			HashMap<String, Long> commoditySales = new HashMap<String, Long>();
-
 			//支店定義ファイルの呼び出し
-			if(!readDefinitionFile(new File(args[0], "branch.lst"), branchDfinition, branchSales, "^\\d{3}$", "支店")) {
+			if(!readDefinitionFile(new File(args[0], "branch.lst"), branchMap, branchSales, "^\\d{3}$", "支店")) {
 				return;
 			}
 			//商品定義ファイルの呼び出し
-			if(!readDefinitionFile(new File(args[0], "commodity.lst"), commodityDifinition, commoditySales, "^\\w{8}$", "商品")) {
+			if(!readDefinitionFile(new File(args[0], "commodity.lst"), commodityMap, commoditySales, "^\\w{8}$", "商品")) {
 				return;
 			}
 
 			//コマンドライン引数からディレクトリを指定
 			File files[] = new File(args[0]).listFiles();
 
-			ArrayList<String> salesNumberFile = new ArrayList<String>();
+			ArrayList<String> salesList = new ArrayList<String>();
 
 			//"半角数字8桁.rcd"に該当するファイルを格納
 				for(int i = 0; i < files.length; i++) {
 					String fileName = files[i].getName();
 					if(fileName.matches("^\\d{8}.rcd$") && files[i].isFile()) {
 						String[] items = (files[i].getName()).split("\\.");
-						salesNumberFile.add(items[0]);
+						salesList.add(items[0]);
 					}
 				}
 				//昇順ソート
-				Collections.sort(salesNumberFile);
+				Collections.sort(salesList);
 				//要素数を元にファイル名が連番になっているかの確認
-				String max = salesNumberFile.get(salesNumberFile.size() - 1);
-				String min = salesNumberFile.get(0);
+				String max = salesList.get(salesList.size() - 1);
+				String min = salesList.get(0);
 				int maxFileNumber = Integer.parseInt(max);
 				int minFileNumber = Integer.parseInt(min);
-				if(maxFileNumber - minFileNumber != salesNumberFile.size() - 1) {
+				if(maxFileNumber - minFileNumber != salesList.size() - 1) {
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
 				}
 
 			//売上ファイルの読み込み
-			BufferedReader br = null;
-			try {
-				for(int i = 0; i < salesNumberFile.size(); i++) {
-					br = new BufferedReader(new FileReader(new File(args[0], salesNumberFile.get(i) + ".rcd")));
+				for(int i = 0; i < salesList.size(); i++) {
+					br = new BufferedReader(new FileReader(new File(args[0], salesList.get(i) + ".rcd")));
 					String rcdName;
 
 					ArrayList<String> salesFile = new ArrayList<String>();
@@ -82,35 +83,39 @@ public class CalculateSales {
 					}
 					//売上ファイル内の行数確認
 					if(salesFile.size() != 3) {
-						System.out.println(salesNumberFile.get(i) + ".rcdのフォーマットが不正です");
+						System.out.println(salesList.get(i) + ".rcdのフォーマットが不正です");
 						return;
 					}
 					//支店コードで売上集計
-					if(!salesSummary(branchSales, salesFile, 0, salesNumberFile.get(i), "支店")) {
+					if(!salesSummary(branchSales, salesFile, 0, salesList.get(i), "支店")) {
 						return;
 					}
 					//商品コードで売上集計
-					if(!salesSummary(commoditySales, salesFile, 1, salesNumberFile.get(i),"商品")) {
+					if(!salesSummary(commoditySales, salesFile, 1, salesList.get(i),"商品")) {
 						return;
 					}
 				}
-			} finally {
-				if(br != null) {
-					br.close();
-				}
-			}
 
 			//支店別売上集計結果の呼び出し
-			if(!fileOutput(branchSales, new File(args[0], "branch.out"), branchDfinition)) {
+			if(!fileOutput(branchSales, new File(args[0], "branch.out"), branchMap)) {
 				return;
 			}
 			//商品別売上集計結果の呼び出し
-			if(!fileOutput(commoditySales, new File(args[0], "commodity.out"), commodityDifinition)) {
+			if(!fileOutput(commoditySales, new File(args[0], "commodity.out"), commodityMap)) {
 				return;
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
+		} finally {
+			try {
+				if(br != null) {
+					br.close();
+				}
+			} catch(IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}
 		}
 
 	}
@@ -118,7 +123,6 @@ public class CalculateSales {
 	//定義ファイル読み込みメソッド
 	public static boolean readDefinitionFile(File filePath, HashMap<String, String> readDefinitionList,
 		HashMap<String, Long> readSalesMap, String codePattern, String name) {
-		try {
 			BufferedReader br = null;
 			File definitionFile = filePath;
 			if(!definitionFile.exists()) {
@@ -138,15 +142,19 @@ public class CalculateSales {
 					readDefinitionList.put(items[0], items[1]);
 					readSalesMap.put(items[0], 0L);
 				}
+			} catch(Exception e) {
+				System.out.println("予期せぬエラーが発生しました");
+				return false;
 			} finally {
+				try {
 					if(br != null) {
 						br.close();
 					}
+				} catch(IOException e) {
+					System.out.println("予期せぬエラーが発生しました");
+					return false;
+				}
 			}
-		} catch(IOException e) {
-				System.out.println("予期せぬエラーが発生しました");
-				return false;
-		}
 		return true;
 	}
 
