@@ -115,7 +115,6 @@ public class CalculateSales {
 				return;
 			}
 		}
-
 	}
 
 	//定義ファイル読み込みメソッド
@@ -160,24 +159,24 @@ public class CalculateSales {
 	public static boolean salesSummary(HashMap<String, Long> readSalesMap, ArrayList<String> readSalesFile,
 		int elementNumber, String salesFileName, String name) {
 
-			//Mapされている値かどうかの判定
-			if(!readSalesMap.containsKey(readSalesFile.get(elementNumber))) {
-				System.out.println(salesFileName + ".rcdの" + name + "コードが不正です");
-				return false;
-			}
-			//売上ファイルの1行目の支店コードをキーにして値(金額)を集計
-			//売上ファイルの2行目の商品コードをキーにして値(金額)を集計
-			long initial = readSalesMap.get(readSalesFile.get(elementNumber));
-			long revenus = Long.parseLong(readSalesFile.get(2));
-			Long salesAmounts = initial + revenus;
+		//Mapされている値かどうかの判定
+		if(!readSalesMap.containsKey(readSalesFile.get(elementNumber))) {
+			System.out.println(salesFileName + ".rcdの" + name + "コードが不正です");
+			return false;
+		}
+		//売上ファイルの1行目の支店コードをキーにして値(金額)を集計
+		//売上ファイルの2行目の商品コードをキーにして値(金額)を集計
+		long initial = readSalesMap.get(readSalesFile.get(elementNumber));
+		long revenus = Long.parseLong(readSalesFile.get(2));
+		Long salesAmounts = initial + revenus;
 
-			//合計金額が10桁を超えたときのエラー
-			if(salesAmounts.toString().length() > 10) {
-				System.out.println("合計金額が10桁を超えました");
-				return false;
-			}
-			readSalesMap.put(readSalesFile.get(elementNumber), salesAmounts);
-			return true;
+		//合計金額が10桁を超えたときのエラー
+		if(salesAmounts.toString().length() > 10) {
+			System.out.println("合計金額が10桁を超えました");
+			return false;
+		}
+		readSalesMap.put(readSalesFile.get(elementNumber), salesAmounts);
+		return true;
 	}
 
 	// 売上集計出力メソッド
